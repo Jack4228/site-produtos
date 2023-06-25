@@ -1,0 +1,29 @@
+@URL=http://localhost/api
+
+@JWT = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibm9tZSI6IkpvXHUwMGUzbyIsImVtYWlsIjoiam9hb0BleGFtcGxlLmNvbSIsIm5hc2NpbWVudG8iOiIxOTkwLTAxLTAxIiwiYWRtaW4iOjF9.Ldgx-ud3bStSd6HAAnjsUVNZFsovbnAj25VasnUKWTw
+@JWT2 = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Miwibm9tZSI6Ik1hcmlhIiwiZW1haWwiOiJtYXJpYUBleGFtcGxlLmNvbSIsIm5hc2NpbWVudG8iOiIxOTkyLTA1LTE1IiwiYWRtaW4iOjB9.biimT5uZ-6DSAvrngnoaibH3KCf9U1Dd60JszTWy2UU
+
+###Get
+GET {{URL}}/categoria/get.php
+
+###Put
+POST {{URL}}/categoria/put.php?id=5
+Authorization: {{JWT}}
+Content-Type: application/json
+
+{
+    "nome": "Transformadores"
+}
+
+###Create
+POST {{URL}}/categoria/create.php
+Authorization: {{JWT}}
+Content-Type: application/json
+
+{
+    "nome": "alpha"
+}
+
+###Delete
+GET {{URL}}/categoria/delete.php?id=7
+Authorization: {{JWT}}

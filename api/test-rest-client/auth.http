@@ -1,0 +1,11 @@
+### Cliente de autenticação
+
+@URL=http://localhost/api/auth
+
+### Recurso de autenticação
+POST {{URL}}/login.php
+
+{
+    "cred": "Maria",
+    "senha": "senha456"
+}

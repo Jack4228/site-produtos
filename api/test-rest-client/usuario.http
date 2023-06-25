@@ -1,0 +1,35 @@
+@URL=http://localhost/api
+
+@JWT = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibm9tZSI6IkpvXHUwMGUzbyIsImVtYWlsIjoiam9hb0BleGFtcGxlLmNvbSIsIm5hc2NpbWVudG8iOiIxOTkwLTAxLTAxIiwiYWRtaW4iOjF9.Ldgx-ud3bStSd6HAAnjsUVNZFsovbnAj25VasnUKWTw
+@JWT2 = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Miwibm9tZSI6Ik1hcmlhIiwiZW1haWwiOiJtYXJpYUBleGFtcGxlLmNvbSIsIm5hc2NpbWVudG8iOiIxOTkyLTA1LTE1IiwiYWRtaW4iOjB9.biimT5uZ-6DSAvrngnoaibH3KCf9U1Dd60JszTWy2UU
+
+### Get
+GET {{URL}}/usuario/get.php
+Authorization: {{JWT}}
+
+### Put
+POST {{URL}}/usuario/put.php?id=21
+Authorization: {{JWT}}
+Content-Type: application/json
+
+{
+    "nome": "Bruno",
+    "email": "bruno@gmail.com",
+    "nascimento": "2004-07-15"
+}
+
+### Create
+POST {{URL}}/usuario/create.php
+Content-Type: application/json
+
+{
+    "nome": "Bernard",
+    "email": "ber@hotmail.com",
+    "senha": "geleia32",
+    "nascimento": "2010-05-05"
+}
+
+
+### Delete
+GET {{URL}}/usuario/delete.php?id=5
+Authorization: {{JWT}}
