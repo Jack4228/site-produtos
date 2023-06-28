@@ -29,6 +29,64 @@
     }
   </style>
 </head>
+<style>
+  .container td:hover {
+    background-color: #f5f5f5;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  th,
+  td {
+    padding: 8px;
+    text-align: left;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    border-top-right-radius: 0%;
+  }
+
+  .column {
+    width: 33.33%;
+  }
+
+  .container {
+    display: flex;
+  }
+
+  .center {
+    text-align: center;
+  }
+
+  .search-container {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .search-container input[type="text"] {
+    padding: 6px;
+    width: 40%;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    border-style: double;
+  }
+
+  .search-container button {
+    padding: 6px 10px;
+    border-radius: 4px;
+    background-color: #516ca9;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+
+  .search-container button:hover {
+    background-color: #1d346b;
+  }
+</style>
+
 
 <body>
   <div class="ie-panel"><a href="http://windows.microsoft.com/en-US/internet-explorer/"><img
@@ -61,7 +119,8 @@
           data-xl-device-layout="rd-navbar-static" data-lg-stick-up-offset="44px" data-xl-stick-up-offset="44px"
           data-xxl-stick-up-offset="44px" data-lg-stick-up="true" data-xl-stick-up="true" data-xxl-stick-up="true">
           <div class="rd-navbar-collapse-toggle rd-navbar-fixed-element-1" data-rd-navbar-toggle=".rd-navbar-collapse">
-            <span></span></div>
+            <span></span>
+          </div>
           <div class="rd-navbar-aside-outer rd-navbar-collapse">
             <div class="rd-navbar-aside">
               <div class="rd-navbar-info">
@@ -118,12 +177,112 @@
         </ul>
       </div>
     </section>
-    <!--Base typography -->
-   
+
+    <div class="center">
+      <h1>Produtos</h1>
+    </div>
+
+    <div class="search-container">
+      <input type="text" id="search-input" placeholder="Digite a categoria">
+      <button id="search-button">Pesquisar</button>
+    </div>
+
+    <div class="container">
+      <div class="column">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+            </tr>
+          </thead>
+          <tbody id="id"></tbody>
+        </table>
+      </div>
+
+      <div class="column">
+        <table>
+          <thead>
+            <tr>
+              <th>Nome</th>
+            </tr>
+          </thead>
+          <tbody id="nome"></tbody>
+        </table>
+      </div>
+
+      <div class="column">
+        <table>
+          <thead>
+            <tr>
+              <th>Preço</th>
+            </tr>
+          </thead>
+          <tbody id="preco"></tbody>
+        </table>
+      </div>
+    </div>
   </div>
+
   <div class="snackbars" id="form-output-global"></div>
   <script src="js/core.min.js"></script>
   <script src="js/script.js"></script>
 </body>
+<!-- fazer metodo para adicionar produto (Apenas adm) -->
+<script>
+  // Função para fazer uma requisição HTTP
+  function fazerRequisicao(url, callback) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', url, true);
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        callback(JSON.parse(xhr.responseText));
+      }
+    };
+    xhr.send();
+  }
+
+  // Função para preencher a tabela com os produtos
+  function preencherTabela(produtos) {
+    var idTable = document.getElementById('id');
+    var nomeTable = document.getElementById('nome');
+    var precoTable = document.getElementById('preco');
+
+    // Limpa as tabelas antes de preencher novamente
+    idTable.innerHTML = '';
+    nomeTable.innerHTML = '';
+    precoTable.innerHTML = '';
+
+    produtos.forEach(function (produto) {
+      var idRow = idTable.insertRow();
+      var idCell = idRow.insertCell();
+      idCell.innerHTML = produto.id;
+
+      var nomeRow = nomeTable.insertRow();
+      var nomeCell = nomeRow.insertCell();
+      nomeCell.innerHTML = produto.nome;
+
+      var precoRow = precoTable.insertRow();
+      var precoCell = precoRow.insertCell();
+      precoCell.innerHTML = 'R$ ' + produto.preco;
+    });
+  }
+  // Função para pesquisar por categoria
+  function pesquisarPorNome() {
+    var input = document.getElementById('search-input');
+    var nome = input.value.trim();
+
+    if (nome !== '') {
+      var url = 'http://localhost/api/produto/get.php?categoria=' + encodeURIComponent(nome);
+      fazerRequisicao(url, preencherTabela);
+    }
+  }
+
+  // Adiciona o evento de clique ao botão de pesquisa
+  var searchButton = document.getElementById('search-button');
+  searchButton.addEventListener('click', pesquisarPorNome);
+
+  // Faz a requisição ao arquivo PHP e chama a função para preencher a tabela inicialmente
+  fazerRequisicao('http://localhost/api/produto/get.php', preencherTabela);
+</script>
 
 </html>
