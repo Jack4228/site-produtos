@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <!-- Fazer o metodo para cadastro de usuario e validar senha -->
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/cadastro.css">
     <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <title>Cadastro</title>
 </head>
 
@@ -18,7 +20,7 @@
         <div class="form-box">
             <h2>Criar Conta</h2>
             <p> Já possue uma conta? <a href="login.html"> Login </a> </p>
-            <form action="#">
+            <form id="userForm"  method="POST">
                 <div class="input-group">
                     <label for="nome"> Nome Completo</label>
                     <input type="text" id="nome" placeholder="Digite o seu nome completo" required>
@@ -29,7 +31,7 @@
                     <input type="email" id="email" placeholder="Digite o seu email" required>
                 </div>
 
-                
+
 
                 <div class="input-group w50">
                     <label for="senha">Senha</label>
@@ -40,13 +42,21 @@
                     <label for="Confirmarsenha">Confirmar Senha</label>
                     <input type="password" id="Confirmarsenha" placeholder="Confirme a senha" required>
                 </div>
-
+                <div class="input-group w50">
+                    <label for="email">Data de Nascimento</label>
+                    <input type="date" id="nascimento"required>
+                </div>
                 <div class="input-group">
-                    <button>Cadastrar</button>
+                    <button type="submit">Cadastrar</button>
                 </div>
 
             </form>
         </div>
     </div>
+    <script src="/site/js/cadastroUsuario.js"></script>
+     
+   
+     
 </body>
+
 </html>
