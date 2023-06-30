@@ -145,6 +145,30 @@
     max-width: 300px;
     height: auto;
   }
+
+
+  /* Estilos para o botão de adicionar ao carrinho */
+  .btn-adicionar-carrinho {
+    background-color: #007bff;
+    /* Cor de fundo */
+    color: white;
+    /* Cor do texto */
+    padding: 8px 16px;
+    /* Espaçamento interno menor */
+    border: none;
+    /* Remover borda */
+    border-radius: 4px;
+    /* Arredondar as bordas */
+    cursor: pointer;
+    /* Cursor ao passar o mouse */
+    font-size: 14px;
+    /* Tamanho da fonte menor */
+  }
+
+  .btn-adicionar-carrinho:hover {
+    background-color: #1d346b;
+    /* Cor de fundo ao passar o mouse */
+  }
 </style>
 
 
@@ -248,9 +272,7 @@
           <div class="product-image">
             <img
               src="https://blog.guemat.com.br/wp-content/uploads/2019/11/OS-TIPOS-DE-FIOS-E-CABOS-EL%C3%89TRICOS-QUE-VOC%C3%8A-DEVE-CONHECER.jpeg"
-              alt="Imagem do Produto"
-              title="Foto meramente ilustrativa"
-              >
+              alt="Imagem do Produto" title="Foto meramente ilustrativa">
           </div>
           <div>
             <p><strong>Quantidade:</strong> <span id="quantidade"></span></p>
@@ -259,8 +281,10 @@
             <p id="descricao"></p>
           </div>
         </div>
-
-        <a href="produtos.html">Voltar para a lista de produtos</a>
+        <div>
+          <a href="produtos.html">Voltar para a lista de produtos</a>
+          <button onclick="adicionarProdutoAoCarrinho()" class="btn-adicionar-carrinho">Adicionar ao Carrinho</button>
+        </div>
       </div>
   </div>
   </section>
@@ -291,21 +315,69 @@
 
   // Função para preencher as informações do produto
   function preencherDetalhesProduto(produto) {
-  var nomeElement = document.getElementById('nome');
-  var precoElement = document.getElementById('preco');
-  var descricaoElement = document.getElementById('descricao');
-  var quantidadeElement = document.getElementById('quantidade');
+    var nomeElement = document.getElementById('nome');
+    var precoElement = document.getElementById('preco');
+    var descricaoElement = document.getElementById('descricao');
+    var quantidadeElement = document.getElementById('quantidade');
 
-  // Preenche as informações do produto nos elementos HTML
-  nomeElement.textContent = produto.nome;
-  precoElement.textContent = 'R$ ' + produto.preco.replace('.', ',');
-  descricaoElement.textContent = produto.descricao;
-  quantidadeElement.textContent = produto.quantidade;
-}
+    // Preenche as informações do produto nos elementos HTML
+    nomeElement.textContent = produto.nome;
+    precoElement.textContent = 'R$ ' + produto.preco.replace('.', ',');
+    descricaoElement.textContent = produto.descricao;
+    quantidadeElement.textContent = produto.quantidade;
+  }
 
   // Faz a requisição para obter os detalhes do produto pelo ID
   fazerRequisicao('http://localhost/api/produto/get.php?id=' + produtoId, preencherDetalhesProduto);
   console.log('http://localhost/api/produto/get.php?id=' + produtoId)
+
+  function adicionarAoCarrinho(produto) {
+    // Verifica se o carrinho já existe na localStorage
+    var carrinho = localStorage.getItem('carrinho');
+    if (carrinho) {
+      // Se o carrinho já existe, converte o JSON para objeto JavaScript
+      carrinho = JSON.parse(carrinho);
+    } else {
+      // Se o carrinho não existe, cria um novo objeto vazio
+      carrinho = {};
+    }
+
+    // Verifica se o produto já está no carrinho
+    if (carrinho.hasOwnProperty(produto.id)) {
+      // Se o produto já está no carrinho, incrementa a quantidade
+      carrinho[produto.id].quantidade++;
+    } else {
+      // Se o produto não está no carrinho, adiciona-o com a quantidade 1
+      carrinho[produto.id] = {
+        produto: produto,
+        quantidade: 1
+      };
+    }
+
+    // Salva o carrinho atualizado na localStorage
+    localStorage.setItem('carrinho', JSON.stringify(carrinho));
+
+    // Exibe uma mensagem ou realiza outras ações de acordo com sua lógica de negócio
+    alert('Produto adicionado ao carrinho!');
+  }
+  function adicionarProdutoAoCarrinho() {
+    // Obter as informações do produto da tela de detalhes
+    var nomeProduto = document.getElementById('nome').textContent;
+    var precoProduto = document.getElementById('preco').textContent;
+    var descricaoProduto = document.getElementById('descricao').textContent;
+
+    // Criar um objeto com as informações do produto
+    var produto = {
+      id: produtoId,
+      nome: nomeProduto,
+      preco: precoProduto,
+      descricao: descricaoProduto,
+      quantidade: 1
+    };
+    console.log(produto)
+    // Chamar a função para adicionar o produto ao carrinho
+    adicionarAoCarrinho(produto);
+  }
 </script>
 
 </html>
