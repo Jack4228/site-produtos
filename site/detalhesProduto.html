@@ -12,6 +12,10 @@
   <link rel="stylesheet" href="css/fonts.css">
   <link rel="stylesheet" href="css/style.css">
   <style>
+    .product-description h2 {
+      text-align: center;
+    }
+
     .ie-panel {
       display: none;
       background: #212121;
@@ -60,42 +64,86 @@
     text-align: center;
   }
 
-  .search-container {
+
+
+
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  h1 {
+    margin-top: 0;
+  }
+
+  /* Estilos para a seção de detalhes do produto */
+  .product-details {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 5px;
+  }
+
+  .product-info {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .product-info img {
+    max-width: 200px;
+    height: auto;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+
+  .product-info div {
+    flex-grow: 1;
+  }
+
+  .product-info h2 {
+    margin-top: 0;
+    color: #333;
+  }
+
+  .product-info p {
+    margin: 0;
+    color: #666;
+  }
+
+  .product-info strong {
+    font-weight: bold;
+  }
+
+  /* Estilos para links */
+  a {
+    color: #007bff;
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  .product-details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     text-align: center;
-    margin-bottom: 20px;
   }
 
-  .search-container input[type="text"] {
-    padding: 6px;
-    width: 40%;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-    border-style: double;
+  .product-details h2 {
+    margin-top: 20px;
   }
 
-  .search-container button {
-    padding: 6px 10px;
-    border-radius: 4px;
-    background-color: #516ca9;
-    color: white;
-    border: none;
-    cursor: pointer;
+  .product-image {
+    display: flex;
+    justify-content: center;
   }
 
-  .search-container button:hover {
-    background-color: #1d346b;
-  }
-
-  .button-detalhar {
-    padding: 6px 10px;
-    border-radius: 2px;
-    width: 100%;
-    background-color: transparent;
-    cursor: pointer;
-  }
-
-  .button-detalhar:hover {
-    background-color: #1d346b;
+  .product-image img {
+    max-width: 300px;
+    height: auto;
   }
 </style>
 
@@ -185,73 +233,50 @@
       <div class="container">
         <ul class="breadcrumbs-custom-path">
           <li><a href="index.html">Inicio</a></li>
-          <li class="active">Produtos</li>
+          <li class="active"> Detalhes do produtos</li>
         </ul>
       </div>
     </section>
 
-    <div class="center">
-      <h1>Produtos</h1>
-    </div>
+    <section class="product-details">
+      <div class="container">
+        <div class="product-details">
+          <div>
+            <h2 id="nome"></h2>
 
-    <div class="search-container">
-      <input type="text" id="search-input" placeholder="Digite a categoria">
-      <button id="search-button">Pesquisar</button>
-      <button id="cadastro" type="button">Cadastrar Produto</button>
-    </div>
+          </div>
+          <div class="product-image">
+            <img
+              src="https://blog.guemat.com.br/wp-content/uploads/2019/11/OS-TIPOS-DE-FIOS-E-CABOS-EL%C3%89TRICOS-QUE-VOC%C3%8A-DEVE-CONHECER.jpeg"
+              alt="Imagem do Produto"
+              title="Foto meramente ilustrativa"
+              >
+          </div>
+          <div>
+            <p><strong>Quantidade:</strong> <span id="quantidade"></span></p>
+            <p><strong>Preço:</strong> <span id="preco"></span></p>
+            <p><strong>Descrição:</strong></p>
+            <p id="descricao"></p>
+          </div>
+        </div>
 
-    <div class="container">
-      <div class="column">
-        <table>
-          <thead>
-            <tr>
-              <th>ID</th>
-            </tr>
-          </thead>
-          <tbody id="id"></tbody>
-        </table>
+        <a href="produtos.html">Voltar para a lista de produtos</a>
       </div>
-
-      <div class="column">
-        <table>
-          <thead>
-            <tr>
-              <th>Nome</th>
-            </tr>
-          </thead>
-          <tbody id="nome"></tbody>
-        </table>
-      </div>
-
-      <div class="column">
-        <table>
-          <thead>
-            <tr>
-              <th>Preço</th>
-            </tr>
-          </thead>
-          <tbody id="preco"></tbody>
-        </table>
-      </div>
-      <div class="column">
-        <table>
-          <thead>
-            <tr>
-              <th>Detalhar</th>
-            </tr>
-          </thead>
-          <tbody id="Detalhar"></tbody>
-        </table>
-      </div>
-    </div>
+  </div>
+  </section>
+  </div>
   </div>
 
   <div class="snackbars" id="form-output-global"></div>
   <script src="js/core.min.js"></script>
   <script src="js/script.js"></script>
 </body>
-<!-- fazer metodo para adicionar produto (Apenas adm) -->
 <script>
+
+  // Obtém o parâmetro "id" da URL
+  const urlParams = new URLSearchParams(window.location.search);
+  const produtoId = urlParams.get('id');
+
   // Função para fazer uma requisição HTTP
   function fazerRequisicao(url, callback) {
     var xhr = new XMLHttpRequest();
@@ -264,72 +289,24 @@
     xhr.send();
   }
 
-  // Função para preencher a tabela com os produtos
-  function preencherTabela(produtos) {
-    var idTable = document.getElementById('id');
-    var nomeTable = document.getElementById('nome');
-    var precoTable = document.getElementById('preco');
-    var detalheTable = document.getElementById('Detalhar');
+  // Função para preencher as informações do produto
+  function preencherDetalhesProduto(produto) {
+  var nomeElement = document.getElementById('nome');
+  var precoElement = document.getElementById('preco');
+  var descricaoElement = document.getElementById('descricao');
+  var quantidadeElement = document.getElementById('quantidade');
 
-    // Limpa as tabelas antes de preencher novamente
-    idTable.innerHTML = '';
-    nomeTable.innerHTML = '';
-    precoTable.innerHTML = '';
-    detalheTable.innerHTML = '';
+  // Preenche as informações do produto nos elementos HTML
+  nomeElement.textContent = produto.nome;
+  precoElement.textContent = 'R$ ' + produto.preco.replace('.', ',');
+  descricaoElement.textContent = produto.descricao;
+  quantidadeElement.textContent = produto.quantidade;
+  // Preencha outros elementos com as informações relevantes do produto
+}
 
-    produtos.forEach(function (produto) {
-      var idRow = idTable.insertRow();
-      var idCell = idRow.insertCell();
-      idCell.innerHTML = produto.id;
-
-      var nomeRow = nomeTable.insertRow();
-      var nomeCell = nomeRow.insertCell();
-      nomeCell.innerHTML = produto.nome;
-
-      var precoRow = precoTable.insertRow();
-      var precoCell = precoRow.insertCell();
-      precoCell.innerHTML = 'R$ ' + produto.preco;
-
-      var acoesCell = detalheTable.insertRow();
-      var detalharButton = document.createElement('button');
-      detalharButton.innerText = 'Detalhar';
-      detalharButton.classList.add('button-detalhar');
-      detalharButton.addEventListener('click', function () {
-        detalharProduto(produto.id);
-      });
-      acoesCell.appendChild(detalharButton);
-    });
-  }
-  // Função para pesquisar por categoria
-  function pesquisarPorNome() {
-    var input = document.getElementById('search-input');
-    var nome = input.value.trim();
-
-    if (nome !== '') {
-      var url = 'http://localhost/api/produto/get.php?categoria=' + encodeURIComponent(nome);
-      fazerRequisicao(url, preencherTabela);
-    }
-  }
-  function detalharProduto(id) {
-    // Redirecionar para a página de detalhes do produto
-    window.location.href = 'detalhesProduto.html?id=' + id;
-  }
-
-  // Adiciona o evento de clique ao botão de pesquisa
-  var searchButton = document.getElementById('search-button');
-  searchButton.addEventListener('click', pesquisarPorNome);
-
-  // Faz a requisição ao arquivo PHP e chama a função para preencher a tabela inicialmente
-  fazerRequisicao('http://localhost/api/produto/get.php', preencherTabela);
-
-  // Obtém uma referência para o botão
-  var botao = document.getElementById('cadastro');
-
-  // Adiciona um ouvinte de evento para o clique no botão
-  botao.addEventListener('click', function () {
-    // Redireciona para outra página
-    window.location.href = 'cadastroProduto.html';
-  });
+  // Faz a requisição para obter os detalhes do produto pelo ID
+  fazerRequisicao('http://localhost/api/produto/get.php?id=' + produtoId, preencherDetalhesProduto);
+  console.log('http://localhost/api/produto/get.php?id=' + produtoId)
 </script>
 
 </html>

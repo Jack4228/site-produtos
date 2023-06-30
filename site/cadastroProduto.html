@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- Fazer o metodo para cadastro de usuario e validar senha -->
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/cadastroProduto.css">
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>Cadastro Produto</title>
+</head>
+
+
+
+
+<body background="images/cadastro/background.png">
+    <div class="box">
+        <div class="form-box">
+            <p> Clique <a href="index.html">aqui </a> para retornar a tela inicial </p>
+            <form id="productForm" method="POST">
+                <div class="input-group">
+                    <label for="name"> Nome do Produto:</label>
+                    <input type="text" id="name" name="name" required><br><br>
+                </div>
+
+                <div class="input-group">
+                    <label for="price">Preço:</label>
+                    <input type="number" id="price" name="price" step="0.01" required><br><br>
+                </div>
+
+
+
+                <div class="input-group w50">
+                    <label for="description">Descrição:</label>
+                    <textarea id="description" name="description" rows="4" cols="120" required></textarea><br><br>
+                </div>
+
+                <div class="input-group">
+                    <button type="submit">Cadastrar</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+    <script src="/site/js/cadastroProduto.js"></script>
+
+
+
+</body>
+
+
+</html>
