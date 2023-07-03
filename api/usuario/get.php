@@ -14,7 +14,7 @@
 
     try {
 
-        $decodedToken = JwtUtil::decode($jwt, "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibm9tZSI6IkpvXHUwMGUzbyIsImVtYWlsIjoiam9hb0BleGFtcGxlLmNvbSIsIm5hc2NpbWVudG8iOiIxOTkwLTAxLTAxIiwiYWRtaW4iOjF9.Ldgx-ud3bStSd6HAAnjsUVNZFsovbnAj25VasnUKWTw");
+        $decodedToken = JwtUtil::decode($jwt, JWT_SECRET_KEY);
         $admin = isset($decodedToken['admin']) && $decodedToken['admin'] === 1;
         
         if ($admin) {

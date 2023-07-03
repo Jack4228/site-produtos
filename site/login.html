@@ -13,20 +13,54 @@
 
 <body background="images/cadastro/background.png">
     <div class="page">
-        <form method="POST" class="formLogin" name="f1" action="/api/auth/login.php">
+        <form method="POST" class="formLogin" name="f1" id="formLogin">
             <h1>Login</h1>
             <p>Digite os seus dados de acesso no campo abaixo.</p>
             <label for="email">E-mail</label>
-            <input type="email" placeholder="Digite seu e-mail" name="email" autofocus="true" required />
+            <input type="email" placeholder="Digite seu e-mail" name="email" autofocus="true" id="email" required />
             <div id="msgemail"></div>
             <label for="password">Senha</label>
-            <input type="password" placeholder="Digite seu e-mail" required />
+            <input type="password" placeholder="Digite sua senha" id="senha" required />
             <a class="senha" href="/">Esqueci minha senha</a>
             <a class="home" href="index.html">Retornar ao inicio</a>
             <input type="submit" value="Acessar" class="btn" />
         </form>
     </div>
+    <script>
+        document.getElementById('formLogin').addEventListener('submit', function (event) {
+            event.preventDefault();
 
+
+            var email = document.getElementById('email').value;
+            var password = document.getElementById('senha').value;
+
+            var user = {
+                cred: email,
+                senha: password
+            };
+
+            var jsonData = JSON.stringify(user);
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/api/auth/login.php', true);
+            xhr.setRequestHeader('Content-type', 'application/json');
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    var response = JSON.parse(xhr.responseText);
+                    console.log(xhr)
+                    if (localStorage.getItem('token') != null) {
+                        localStorage.removeItem("token");
+                    }
+                        localStorage.setItem('token', "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibm9tZSI6IkpvXHUwMGUzbyIsImVtYWlsIjoiam9hb0BleGFtcGxlLmNvbSIsIm5hc2NpbWVudG8iOiIxOTkwLTAxLTAxIiwiYWRtaW4iOjF9.Ldgx-ud3bStSd6HAAnjsUVNZFsovbnAj25VasnUKWTw");
+                    window.location.href = 'index.html';
+                } else {
+                    console.error('Erro: ' + xhr.status);
+                    alert("Erro ao efetuar o login")
+                }
+            };
+            xhr.send(jsonData);
+        })
+    </script>
 
 </body>
 

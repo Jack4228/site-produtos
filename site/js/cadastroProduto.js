@@ -7,25 +7,28 @@ document.getElementById('productForm').addEventListener('submit', function(event
         description: document.getElementById('description').value
     };
 
-    var token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Miwibm9tZSI6Ik1hcmlhIiwiZW1haWwiOiJtYXJpYUBleGFtcGxlLmNvbSIsIm5hc2NpbWVudG8iOiIxOTkyLTA1LTE1IiwiYWRtaW4iOjB9.biimT5uZ-6DSAvrngnoaibH3KCf9U1Dd60JszTWy2UU'; // Substitua pelo seu token válido
+    var token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibm9tZSI6IkpvXHUwMGUzbyIsImVtYWlsIjoiam9hb0BleGFtcGxlLmNvbSIsIm5hc2NpbWVudG8iOiIxOTkwLTAxLTAxIiwiYWRtaW4iOjF9.Ldgx-ud3bStSd6HAAnjsUVNZFsovbnAj25VasnUKWTw'; 
 
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', 'http://localhost/api/produto/create.php', true);
-    xhr.setRequestHeader('Content-type', 'application/json');
-    xhr.setRequestHeader('Authorization'," Bearer:"+ token);
-
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4) {
-            if (xhr.status === 200) {
-                var response = JSON.parse(xhr.responseText);
-                alert('Produto cadastrado com sucesso!');
-               
-            } else {
-                var response = JSON.parse(xhr.responseText);
-                alert('Erro ao cadastrar produto: ' + response.message);
-            }
-        }
-    };
-
-    xhr.send(JSON.stringify(product));
+    fetch('http://localhost/api/produto/create.php', {
+  method: 'POST',
+  headers: {
+    'Content-type': 'application/json',
+    'Authorization': 'Bearer ' + token
+  },
+  body: JSON.stringify(product)
+})
+  .then(response => {
+    if (response.ok) {
+      return response.json();
+    } else {
+      throw new Error('Erro ao cadastrar produto');
+    }
+  })
+  .then(data => {
+    alert('Produto cadastrado com sucesso!');
+    // Faça o que for necessário com a resposta (data) aqui
+  })
+  .catch(error => {
+    alert('Erro ao cadastrar produto: ' + error.message);
+  });
 });

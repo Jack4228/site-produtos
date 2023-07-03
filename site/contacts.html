@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html class="wide wow-animation" lang="en">
 
@@ -27,6 +26,26 @@
     html.ie-10 .ie-panel,
     html.lt-ie-10 .ie-panel {
       display: block;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    th,
+    td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+
+    h1 {
+      text-align: center;
     }
   </style>
 </head>
@@ -123,64 +142,76 @@
     <h1>Lista de Usuários</h1>
 
     <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nome</th>
-                <th>Email</th>
-            </tr>
-        </thead>
-        <tbody id="users-table-body">
-        </tbody>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nome</th>
+          <th>Email</th>
+          <th>ADM?</th>
+        </tr>
+      </thead>
+      <tbody id="users-table-body">
+      </tbody>
     </table>
   </div>
   <div class="snackbars" id="form-output-global"></div>
   <script src="js/core.min.js"></script>
   <script src="js/script.js"></script>
-<script>
-  // Função para fazer a requisição ao arquivo PHP e preencher a tabela com os usuários
-  function getUsers() {
+  <script>
+    // Função para fazer a requisição ao arquivo PHP e preencher a tabela com os usuários
+    function getUsers() {
       fetch('http://localhost/api/usuario/get.php', {
-          headers: {
-              'Authorization': "sgdfg8sdf798g7sdf"
-          }
+        headers: {
+          'authorization': getAuthToken()
+        }
       })
-          .then(response => response.json())
-          .then(data => {
-              const usersTableBody = document.getElementById('users-table-body');
-              data.forEach(user => {
-                  const row = document.createElement('tr');
-                  const idCell = document.createElement('td');
-                  const nameCell = document.createElement('td');
-                  const emailCell = document.createElement('td');
-                  idCell.textContent = user.id;
-                  nameCell.textContent = user.nome;
-                  emailCell.textContent = user.email;
-                  row.appendChild(idCell);
-                  row.appendChild(nameCell);
-                  row.appendChild(emailCell);
-                  usersTableBody.appendChild(row);
-              });
-             
-          })
-          .catch(error => console.error(error));
-  }
+        .then(response => response.json())
+        .then(data => {
+          const usersTableBody = document.getElementById('users-table-body');
+          data.forEach(user => {
+            const row = document.createElement('tr');
+            const idCell = document.createElement('td');
+            const nameCell = document.createElement('td');
+            const emailCell = document.createElement('td');
+            const admCell = document.createElement('td');
+            idCell.textContent = user.id;
+            nameCell.textContent = user.nome;
+            emailCell.textContent = user.email;
+            admCell.textContent = user.admin == 1 ? 'Sim' : 'Não';
+            row.appendChild(idCell);
+            row.appendChild(nameCell);
+            row.appendChild(emailCell);
+            row.appendChild(admCell);
+            usersTableBody.appendChild(row);
+          });
 
-  // Função para obter o token de autenticação do localStorage
-  function getAuthToken() {
-      return "sgdfg8sdf798g7sdf"
-  }
+        })
+        .catch(error => console.error(error));
+    }
 
-  // Verifica se o token está presente
-  if (getAuthToken()) {
+    // Função para obter o token de autenticação do localStorage
+    function getAuthToken() {
+      var tokenString = localStorage.getItem('token');
+
+      // Parse do JSON
+      var data = JSON.parse(tokenString);
+
+      // Acessar o valor do token
+      var token = data.token;
+
+      return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibm9tZSI6IkpvXHUwMGUzbyIsImVtYWlsIjoiam9hb0BleGFtcGxlLmNvbSIsIm5hc2NpbWVudG8iOiIxOTkwLTAxLTAxIiwiYWRtaW4iOjF9.Ldgx-ud3bStSd6HAAnjsUVNZFsovbnAj25VasnUKWTw";
+    }
+
+    // Verifica se o token está presente
+    if (getAuthToken()) {
       // Chama a função para preencher a tabela se o token estiver presente
       getUsers();
-     
-  } else {
+
+    } else {
       // Redireciona para a página de login se o token não estiver presente
       window.location.href = 'login.html';
-  }
-</script>
+    }
+  </script>
 </body>
 
 </html>

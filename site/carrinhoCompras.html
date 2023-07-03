@@ -2,7 +2,7 @@
 <html class="wide wow-animation" lang="en">
 
 <head>
-  <title>Detalhes</title>
+  <title>Carrinho de compras</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -31,6 +31,7 @@
     html.lt-ie-10 .ie-panel {
       display: block;
     }
+    
   </style>
 </head>
 <style>
@@ -147,28 +148,24 @@
   }
 
 
-  /* Estilos para o botão de adicionar ao carrinho */
-  .btn-adicionar-carrinho {
-    background-color: #007bff;
-    /* Cor de fundo */
-    color: white;
-    /* Cor do texto */
-    padding: 8px 16px;
-    /* Espaçamento interno menor */
-    border: none;
-    /* Remover borda */
-    border-radius: 4px;
-    /* Arredondar as bordas */
-    cursor: pointer;
-    /* Cursor ao passar o mouse */
-    font-size: 14px;
-    /* Tamanho da fonte menor */
-  }
+  table {
+      border-collapse: collapse;
+      width: 100%;
+    }
 
-  .btn-adicionar-carrinho:hover {
-    background-color: #1d346b;
-    /* Cor de fundo ao passar o mouse */
-  }
+    th, td {
+      text-align: left;
+      padding: 8px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    tr:hover {
+      background-color: #f5f5f5;
+    }
+
+    h1 {
+      text-align: center;
+    }
 </style>
 
 
@@ -257,132 +254,79 @@
       <div class="container">
         <ul class="breadcrumbs-custom-path">
           <li><a href="index.html">Inicio</a></li>
-          <li class="active"> Detalhes do produtos</li>
+          <li class="active">Carrinho de compras</li>
         </ul>
       </div>
     </section>
 
-    <section class="product-details">
-      <div class="container">
-        <div class="product-details">
-          <div>
-            <h2 id="nome"></h2>
-
-          </div>
-          <div class="product-image">
-            <img
-              src="https://blog.guemat.com.br/wp-content/uploads/2019/11/OS-TIPOS-DE-FIOS-E-CABOS-EL%C3%89TRICOS-QUE-VOC%C3%8A-DEVE-CONHECER.jpeg"
-              alt="Imagem do Produto" title="Foto meramente ilustrativa">
-          </div>
-          <div>
-            <p><strong>Quantidade:</strong> <span id="quantidade"></span></p>
-            <p><strong>Preço:</strong> <span id="preco"></span></p>
-            <p><strong>Descrição:</strong></p>
-            <p id="descricao"></p>
-          </div>
-        </div>
-        <div>
-          <a href="produtos.html">Voltar para a lista de produtos</a>
-          <button onclick="adicionarProdutoAoCarrinho()" class="btn-adicionar-carrinho">Adicionar ao Carrinho</button>
-          <br>
-          <button onclick="onOpencarrinho()" class="btn-adicionar-carrinho">Ir para carrinho de compras</button>
-        </div>
-      </div>
-  </div>
-  </section>
+    <h1>Carrinho de Compras</h1>
+    <table id="data-table">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Preço</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Os dados serão preenchidos aqui -->
+      </tbody>
+    </table>
   </div>
   </div>
 
   <div class="snackbars" id="form-output-global"></div>
   <script src="js/core.min.js"></script>
   <script src="js/script.js"></script>
+  <script>
+  var exampleData = {
+      1: {
+        produto: {
+          id: "1",
+          nome: "Cabo Elétrico de Cobre",
+          preco: "R$ 150,00",
+          // outras propriedades do produto
+        },
+        quantidade: 1
+      }
+    };
+
+    // Obtém os dados do localStorage
+    var dadosLocalStorage = JSON.parse(localStorage.getItem('meusDados')) || exampleData;
+
+    // Obtém a referência da tabela
+    var tableBody = document.querySelector('#data-table tbody');
+
+    // Função para preencher a tabela com os dados
+    function preencherTabela() {
+      // Limpa o conteúdo da tabela
+      tableBody.innerHTML = '';
+
+      // Itera sobre os dados e cria as linhas da tabela
+      for (var key in dadosLocalStorage) {
+        if (dadosLocalStorage.hasOwnProperty(key)) {
+          var item = dadosLocalStorage[key];
+
+          var row = document.createElement('tr');
+          var produtoCell = document.createElement('td');
+          var quantidadeCell = document.createElement('td');
+
+          produtoCell.textContent = item.produto.nome + ' - ' + item.produto.preco;
+          quantidadeCell.textContent = item.quantidade;
+
+          row.appendChild(produtoCell);
+          row.appendChild(quantidadeCell);
+
+          tableBody.appendChild(row);
+        }
+      }
+    }
+
+    // Chama a função para preencher a tabela inicialmente
+    preencherTabela();
+  </script>
 </body>
 <script>
 
-  // Obtém o parâmetro "id" da URL
-  const urlParams = new URLSearchParams(window.location.search);
-  const produtoId = urlParams.get('id');
-
-  // Função para fazer uma requisição HTTP
-  function fazerRequisicao(url, callback) {
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', url, true);
-    xhr.onreadystatechange = function () {
-      if (xhr.readyState === 4 && xhr.status === 200) {
-        callback(JSON.parse(xhr.responseText));
-      }
-    };
-    xhr.send();
-  }
-
-  // Função para preencher as informações do produto
-  function preencherDetalhesProduto(produto) {
-    var nomeElement = document.getElementById('nome');
-    var precoElement = document.getElementById('preco');
-    var descricaoElement = document.getElementById('descricao');
-    var quantidadeElement = document.getElementById('quantidade');
-
-    // Preenche as informações do produto nos elementos HTML
-    nomeElement.textContent = produto.nome;
-    precoElement.textContent = 'R$ ' + produto.preco.replace('.', ',');
-    descricaoElement.textContent = produto.descricao;
-    quantidadeElement.textContent = produto.quantidade;
-  }
-
-  // Faz a requisição para obter os detalhes do produto pelo ID
-  fazerRequisicao('http://localhost/api/produto/get.php?id=' + produtoId, preencherDetalhesProduto);
-  console.log('http://localhost/api/produto/get.php?id=' + produtoId)
-
-  function adicionarAoCarrinho(produto) {
-    // Verifica se o carrinho já existe na localStorage
-    var carrinho = localStorage.getItem('carrinho');
-    if (carrinho) {
-      // Se o carrinho já existe, converte o JSON para objeto JavaScript
-      carrinho = JSON.parse(carrinho);
-    } else {
-      // Se o carrinho não existe, cria um novo objeto vazio
-      carrinho = {};
-    }
-
-    // Verifica se o produto já está no carrinho
-    if (carrinho.hasOwnProperty(produto.id)) {
-      // Se o produto já está no carrinho, incrementa a quantidade
-      carrinho[produto.id].quantidade++;
-    } else {
-      // Se o produto não está no carrinho, adiciona-o com a quantidade 1
-      carrinho[produto.id] = {
-        produto: produto,
-        quantidade: 1
-      };
-    }
-
-    // Salva o carrinho atualizado na localStorage
-    localStorage.setItem('carrinho', JSON.stringify(carrinho));
-
-    alert('Produto adicionado ao carrinho!');
-  }
-  function adicionarProdutoAoCarrinho() {
-    // Obter as informações do produto da tela de detalhes
-    var nomeProduto = document.getElementById('nome').textContent;
-    var precoProduto = document.getElementById('preco').textContent;
-    var descricaoProduto = document.getElementById('descricao').textContent;
-
-    // Criar um objeto com as informações do produto
-    var produto = {
-      id: produtoId,
-      nome: nomeProduto,
-      preco: precoProduto,
-      descricao: descricaoProduto,
-      quantidade: 1
-    };
-    console.log(produto)
-    // Chamar a função para adicionar o produto ao carrinho
-    adicionarAoCarrinho(produto);
-  }
-
-  function onOpencarrinho(){
-    window.location.href = 'carrinhoCompras.html';
-  }
 </script>
 
 </html>
